@@ -1,8 +1,8 @@
 'use client'
 
 import { Loader2, Check, X } from 'lucide-react'
-import { cn } from '@/shared/utils/cn'
-import type { LoadingState } from '@/shared/types'
+import { cn } from '@/utils/cn'
+import type { LoadingState } from '@/types'
 import type { ButtonHTMLAttributes } from 'react'
 
 interface LoadingButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {

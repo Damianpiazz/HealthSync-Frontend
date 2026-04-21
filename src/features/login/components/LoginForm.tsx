@@ -5,8 +5,8 @@ import { Eye, EyeOff, Mail, Lock } from 'lucide-react'
 import { useState } from 'react'
 import type { UseFormReturn } from 'react-hook-form'
 import type { LoginSchema } from '@/features/login/validations/login.schema'
-import type { LoadingState } from '@/shared/types'
-import { LoadingButton } from '@/shared/components/LoadingButton'
+import type { LoadingState } from '@/types'
+import { LoadingButton } from '@/components/LoadingButton'
 import authText from '@/features/login/config/login.json'
 
 interface LoginFormProps {

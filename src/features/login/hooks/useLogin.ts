@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { loginSchema, type LoginSchema } from '../validations/login.schema'
 import { loginUser } from '../services/login.service.mock'
-import type { LoadingState } from '@/shared/types'
+import type { LoadingState } from '@/types'
 
 export function useLogin() {
   const router = useRouter()
