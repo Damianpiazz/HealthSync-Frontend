@@ -1,14 +1,15 @@
 export interface LoginCredentials {
-  email: string
+  identifier: string
   password: string
 }
 
-export interface LoginResult {
-  success: boolean
-  error?: string
-}
-
-export interface LoginFormState {
-  email: string
-  password: string
-}
+export type LoginResult =
+  | {
+      success: true
+      accessToken: string
+      refreshToken: string
+    }
+  | {
+      success: false
+      error: string
+    }

@@ -7,31 +7,29 @@ import type { UseFormReturn } from 'react-hook-form'
 import type { LoginSchema } from '@/features/login/validations/login.schema'
 import type { LoadingState } from '@/shared/types'
 import { LoadingButton } from '@/shared/components/LoadingButton'
+import authText from '@/features/login/config/login.json'
 
 interface LoginFormProps {
-  form: UseFormReturn<LoginSchema>
+  form: UseFormReturn<LoginSchema, any, LoginSchema>
   state: LoadingState
   serverError: string | null
   onSubmit: () => void
 }
 
-/**
- * Componente de formulario de login.
- * Encargado de renderizar inputs, validaciones y UI de autenticacion.
- * Recibe control del formulario desde react-hook-form y estado externo del hook useLogin.
- */
 export function LoginForm({ form, state, serverError, onSubmit }: LoginFormProps) {
-  // Estado local para mostrar/ocultar password
   const [showPassword, setShowPassword] = useState(false)
 
-  // Extrae funciones y errores del formulario
-  const { register, formState: { errors } } = form
+  const {
+    register,
+    formState: { errors },
+  } = form
+
+  const t = authText.login
 
   return (
-    // Formulario principal de login
     <form onSubmit={onSubmit} noValidate className="space-y-5">
 
-      {/* Error general del servidor (login fallido) */}
+      {/* Error servidor */}
       {serverError && (
         <div
           role="alert"
@@ -41,66 +39,59 @@ export function LoginForm({ form, state, serverError, onSubmit }: LoginFormProps
         </div>
       )}
 
-      {/* Campo Email */}
+      {/* Identifier: email | usuario | DNI */}
       <div className="space-y-1.5">
-        <label htmlFor="email" className="text-sm font-medium text-foreground">
-          Email
+        <label htmlFor="identifier" className="text-sm font-medium text-foreground">
+          {t.identifierLabel}
         </label>
 
         <div className="relative">
-          {/* Icono decorativo */}
           <Mail
             className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden="true"
           />
 
-          {/* Input de email controlado por react-hook-form */}
           <input
-            id="email"
-            type="email"
-            autoComplete="email"
-            placeholder="tu@email.com"
-            aria-invalid={!!errors.email}
-            aria-describedby={errors.email ? 'email-error' : undefined}
+            id="identifier"
+            type="text"
+            autoComplete="username"
+            placeholder={t.identifierPlaceholder}
+            aria-invalid={!!errors.identifier}
+            aria-describedby={errors.identifier ? 'identifier-error' : undefined}
             className="flex h-10 w-full rounded-md border border-input bg-background pl-10 pr-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-            {...register('email')}
+            {...register('identifier')}
           />
         </div>
 
-        {/* Mensaje de error de email */}
-        {errors.email && (
-          <p id="email-error" role="alert" className="text-xs text-destructive">
-            {errors.email.message}
+        {errors.identifier && (
+          <p id="identifier-error" role="alert" className="text-xs text-destructive">
+            {errors.identifier.message}
           </p>
         )}
       </div>
 
-      {/* Campo Password */}
+      {/* Password */}
       <div className="space-y-1.5">
 
-        {/* Label + link de recuperacion */}
         <div className="flex items-center justify-between">
           <label htmlFor="password" className="text-sm font-medium text-foreground">
-            Contraseña
+            {t.passwordLabel}
           </label>
 
-          {/* Link a recuperacion de password */}
           <Link
             href="/recuperar-password"
             className="text-xs text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
           >
-            ¿Olvidaste tu contraseña?
+            {t.forgotPassword}
           </Link>
         </div>
 
         <div className="relative">
-          {/* Icono de lock */}
           <Lock
             className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden="true"
           />
 
-          {/* Input de password con toggle de visibilidad */}
           <input
             id="password"
             type={showPassword ? 'text' : 'password'}
@@ -112,18 +103,20 @@ export function LoginForm({ form, state, serverError, onSubmit }: LoginFormProps
             {...register('password')}
           />
 
-          {/* Boton para mostrar/ocultar password */}
           <button
             type="button"
             aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
             onClick={() => setShowPassword((prev) => !prev)}
             className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-1 text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
-            {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+            {showPassword ? (
+              <EyeOff className="h-4 w-4" />
+            ) : (
+              <Eye className="h-4 w-4" />
+            )}
           </button>
         </div>
 
-        {/* Error de password */}
         {errors.password && (
           <p id="password-error" role="alert" className="text-xs text-destructive">
             {errors.password.message}
@@ -131,23 +124,23 @@ export function LoginForm({ form, state, serverError, onSubmit }: LoginFormProps
         )}
       </div>
 
-      {/* Boton de submit con estados de loading/success/error */}
+      {/* Submit */}
       <LoadingButton
         type="submit"
         state={state}
         className="w-full"
-        loadingText="Iniciando sesión..."
-        successText="¡Bienvenido!"
-        errorText="Error al iniciar sesión"
+        loadingText={t.loading}
+        successText={t.success}
+        errorText={t.error}
       >
-        Iniciar sesión
+        {t.submit}
       </LoadingButton>
 
-      {/* Link a registro */}
+      {/* Registro */}
       <p className="text-center text-sm text-muted-foreground">
-        ¿No tienes cuenta?{' '}
+        {t.noAccount}{' '}
         <Link href="/registro" className="text-primary hover:underline">
-          Regístrate
+          {t.register}
         </Link>
       </p>
     </form>

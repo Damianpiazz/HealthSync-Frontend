@@ -1,12 +1,40 @@
 import type { LoginCredentials, LoginResult } from '../types'
 
-// llamada a la api simulada para el login
-export async function loginUser(credentials: LoginCredentials): Promise<LoginResult> {
-  await new Promise((resolve) => setTimeout(resolve, 1000))
+type AuthProvider = 'local' | 'auth0'
 
-  if (credentials.email === 'error@test.com') {
-    return { success: false, error: 'Credenciales inválidas' }
+const AUTH_ENDPOINTS: Record<AuthProvider, string> = {
+  local: '/auth/local/login',
+  auth0: '/auth/auth0/login',
+}
+
+// TODO: Migrar a axios
+export async function loginUser(
+  credentials: LoginCredentials,
+  provider: AuthProvider = 'local'
+): Promise<LoginResult> {
+  try {
+    const res = await fetch(AUTH_ENDPOINTS[provider], {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    })
+
+    if (!res.ok) {
+      const errorText = await res.text()
+      return { success: false, error: errorText }
+    }
+
+    const data = await res.json()
+
+    return {
+      success: true,
+      accessToken: data.accessToken,
+      refreshToken: data.refreshToken,
+    }
+  } catch {
+    return {
+      success: false,
+      error: 'Error de red',
+    }
   }
-
-  return { success: true }
 }

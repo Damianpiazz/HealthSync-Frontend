@@ -1,0 +1,16 @@
+{
+  "login": {
+    "title": "Iniciar sesión",
+    "subtitle": "Ingresa tus credenciales para acceder",
+    "identifierLabel": "Email, usuario o DNI",
+    "identifierPlaceholder": "tu@email.com / usuario / DNI",
+    "passwordLabel": "Contraseña",
+    "forgotPassword": "¿Olvidaste tu contraseña?",
+    "submit": "Iniciar sesión",
+    "loading": "Iniciando sesión...",
+    "success": "¡Bienvenido!",
+    "error": "Error al iniciar sesión",
+    "noAccount": "¿No tienes cuenta?",
+    "register": "Regístrate"
+  }
+}
